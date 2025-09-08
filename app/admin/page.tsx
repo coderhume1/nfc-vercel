@@ -41,7 +41,7 @@ export default async function Admin() {
                   <td>{s.terminalId}</td>
                   <td>{s.amount}</td>
                   <td>{s.currency}</td>
-                  <td>{s.status === "paid" ? <span className="badge badge-paid">paid</span> : <span className="badge badge-pending">pending</span>}</td>
+                  <td>{s.status === "paid" ? <span className="badge badge-paid">paid</span> : s.status === "canceled" ? <span className="badge">canceled</span> : <span className="badge badge-pending">pending</span>}</td>
                   <td className="text-xs">{s.createdAt.toISOString()}</td>
                 </tr>
               ))}
