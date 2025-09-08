@@ -36,10 +36,7 @@ export default async function Page({ params }: { params: { terminalId: string } 
               <div><div className="text-gray-500">Amount</div><div>{session.amount} {session.currency}</div></div>
               <div><div className="text-gray-500">Created</div><div>{session.createdAt.toISOString()}</div></div>
             </div>
-            <form method="post" action="/api/sandbox/pay" className="mt-3">
-              <input type="hidden" name="sessionId" value={session.id} />
-              <button className="btn w-full">Approve (Sandbox)</button>
-            </form>
+            <a className="btn w-full mt-3" href={`/api/sandbox/customer-pay?terminalId=${terminalId}`}>Approve (Sandbox)</a>
             {isAdmin && (
               <form method="post" action="/api/admin/sessions/cancel" className="mt-2">
                 <input type="hidden" name="sessionId" value={session.id} />

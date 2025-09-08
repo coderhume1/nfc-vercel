@@ -64,3 +64,8 @@
 
 ## Device
 - ESP32 polls `/api/v1/sessions` and acts only on the newest pending for its terminal.
+
+### Sandbox Customer URL
+- Public test endpoint (NO AUTH): `/api/sandbox/customer-pay?terminalId={terminalId}`
+- Approves the **newest** pending for that terminal and cancels older ones.
+- Intended for demo only.
