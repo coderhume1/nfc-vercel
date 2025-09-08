@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info: { title: NFC Pay Starter API, version: "1.0.0" }
+servers: [ { url: https://<project>.vercel.app } ]
+paths:
+  /api/v1/bootstrap:
+    get:
+      security: [ { ApiKeyAuth: [] } ]
+      parameters:
+        - in: query; name: deviceId; schema: { type: string }
+        - in: query; name: store; schema: { type: string }
+      responses: { "200": { description: OK } }
+  /api/v1/sessions:
+    post:
+      security: [ { ApiKeyAuth: [] } ]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                terminalId: { type: string }
+                amount: { type: integer }
+                currency: { type: string }
+      responses: { "201": { description: Created } }
+  /api/v1/sessions/{id}:
+    get:
+      parameters: [ { name: id, in: path, required: true, schema: { type: string } } ]
+      responses: { "200": { description: OK } }
+  /api/sandbox/pay:
+    post:
+      requestBody:
+        content:
+          application/json: { schema: { type: object, properties: { sessionId: { type: string } } } }
+          application/x-www-form-urlencoded: { schema: { type: object, properties: { sessionId: { type: string } } } }
+      responses: { "302": { description: Redirect to /p/{terminalId} } }
+components:
+  securitySchemes:
+    ApiKeyAuth: { type: apiKey, in: header, name: X-API-Key }
+
+/api/v1/payments:
+  post:
+    security: [ { ApiKeyAuth: [] } ]
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [terminalId]
+            properties:
+              terminalId: { type: string }
+              amount: { type: integer }
+              currency: { type: string }
+    responses: { "201": { description: Created } }

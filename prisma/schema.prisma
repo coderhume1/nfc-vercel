@@ -1,0 +1,36 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Session {
+  id         String   @id @default(uuid())
+  terminalId String
+  amount     Int
+  currency   String
+  status     String   @default("pending")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([terminalId])
+}
+
+model Device {
+  deviceId   String   @id
+  storeCode  String
+  terminalId String
+  amount     Int      @default(0)
+  currency   String   @default("USD")
+  status     String   @default("new")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model TerminalSequence {
+  storeCode String @id
+  last      Int    @default(0)
+}

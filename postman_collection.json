@@ -1,0 +1,116 @@
+{
+  "info": {
+    "name": "NFC Pay Starter (Vercel)",
+    "_postman_id": "12345678-aaaa-bbbb-cccc-1234567890ab",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://<project>.vercel.app"
+    },
+    {
+      "key": "apiKey",
+      "value": "esp32_test_api_key_123456"
+    },
+    {
+      "key": "deviceId",
+      "value": "A1B2C3D4E5F6"
+    }
+  ],
+  "item": [
+    {
+      "name": "Bootstrap",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-API-Key",
+            "value": "{{apiKey}}"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "{{deviceId}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/bootstrap",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "bootstrap"
+          ]
+        }
+      }
+    },
+    {
+      "name": "Create Session",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-API-Key",
+            "value": "{{apiKey}}"
+          },
+          {
+            "key": "X-Device-Id",
+            "value": "{{deviceId}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/sessions",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "sessions"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{}"
+        }
+      }
+    },
+    {
+      "name": "Create Payment (alias)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-API-Key",
+            "value": "{{apiKey}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/payments",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "v1",
+            "payments"
+          ]
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\"terminalId\":\"STORE01-0001\",\"amount\":500,\"currency\":\"USD\"}"
+        }
+      }
+    }
+  ]
+}
