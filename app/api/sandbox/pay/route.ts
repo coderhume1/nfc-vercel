@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireApiKey, isAdminAuthed } from "@/lib/auth";
+import { revalidatePath } from "next/cache";
 
 export const runtime = "nodejs";
 
@@ -33,6 +34,8 @@ export async function POST(req: NextRequest) {
 
   // Mark newest paid
   await prisma.session.update({ where: { id: s.id }, data: { status: "paid" } });
+  revalidatePath(`/p/${s.terminalId}`);
+  revalidatePath(`/admin`);
 
   // Auto-cancel any remaining pending (older) to avoid chain approvals
   await prisma.session.updateMany({

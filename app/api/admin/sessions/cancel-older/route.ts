@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const runtime = "nodejs";
@@ -23,5 +24,7 @@ export async function POST(req: NextRequest) {
     data: { status: "canceled" },
   });
 
+  revalidatePath(`/p/${terminalId}`);
+  revalidatePath(`/admin`);
   return NextResponse.redirect(new URL(`/p/${terminalId}`, req.url));
 }

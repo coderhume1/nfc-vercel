@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export const runtime = "nodejs";
@@ -14,6 +15,8 @@ export async function POST(req: NextRequest) {
   const terminalId = String(form.get("terminalId") || "");
   if (!sessionId) return NextResponse.json({ error: "sessionId required" }, { status: 400 });
   await prisma.session.update({ where: { id: sessionId }, data: { status: "canceled" } }).catch(() => {});
+  revalidatePath(`/p/${terminalId}`);
+  revalidatePath(`/admin`);
   const back = terminalId ? `/p/${terminalId}` : "/admin";
   return NextResponse.redirect(new URL(back, req.url));
 }
