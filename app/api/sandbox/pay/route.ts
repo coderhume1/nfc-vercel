@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
   const s = await prisma.session.findUnique({ where: { id: sessionId } });
   if (!s) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
-  // Only latest pending for the terminal can be approved
+  // Only the NEWEST pending can be approved
   const latest = await prisma.session.findFirst({
     where: { terminalId: s.terminalId, status: "pending" },
     orderBy: { createdAt: "desc" },
@@ -31,7 +31,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "conflict", message: "Only the most recent pending session can be approved. Cancel older ones first." }, { status: 409 });
   }
 
+  // Mark newest paid
   await prisma.session.update({ where: { id: s.id }, data: { status: "paid" } });
+
+  // Auto-cancel any remaining pending (older) to avoid chain approvals
   await prisma.session.updateMany({
     where: { terminalId: s.terminalId, status: "pending" },
     data: { status: "canceled" },

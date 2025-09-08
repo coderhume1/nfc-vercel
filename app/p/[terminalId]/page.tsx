@@ -40,6 +40,13 @@ export default async function Page({ params }: { params: { terminalId: string } 
               <input type="hidden" name="sessionId" value={session.id} />
               <button className="btn w-full">Approve (Sandbox)</button>
             </form>
+            {isAdmin && (
+              <form method="post" action="/api/admin/sessions/cancel" className="mt-2">
+                <input type="hidden" name="sessionId" value={session.id} />
+                <input type="hidden" name="terminalId" value={terminalId} />
+                <button className="btn-outline text-red-600">Cancel Newest</button>
+              </form>
+            )}
           </div>
         ) : (
           <p className="text-sm text-gray-500 mt-2">No pending session for this terminal.</p>
